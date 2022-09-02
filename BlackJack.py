@@ -112,17 +112,20 @@ def BlackJack():
         print("Minimum bet is $10!")
 
         while True:
-            amountToBet = int(input("How much would you like to bet? (Type 0 to exit): "))
-            if 10 > amountToBet > 0:
-                print("Oops! The bet minimum is $10! Try again")
-            elif amountToBet == 0:
-                quit()
-            elif amountToBet > money:
-                print("You don't have enough for a bet that high")
+            amountToBet = input("How much would you like to bet? (Type 0 to exit): ")
+            if not amountToBet.isdigit():
+                print("That input was not an integer number")
             else:
-                print("current bet: ", amountToBet)
-                print("money left to spend: ", money)
-                break
+                if 10 > int(amountToBet) > 0:
+                    print("Oops! The bet minimum is $10! Try again")
+                elif int(amountToBet) == 0:
+                    quit()
+                elif int(amountToBet) > money:
+                    print("You don't have enough for a bet that high")
+                else:
+                    print("current bet: ", amountToBet)
+                    print("money left to spend: ", money)
+                    break
         
         masterDeck = []
         masterDeck = deck*6
@@ -160,8 +163,8 @@ def BlackJack():
         Ppoints = pStarterHand.getPPoints()
         if Ppoints == 21:
             print("blackjack")
-            money += 1.5 * amountToBet
-            print(f"you earned: {1.5 * amountToBet} dollars")
+            money += 1.5 * int(amountToBet)
+            print(f"you earned: {1.5 * int(amountToBet)} dollars")
             PinPlay = False
 
         while PinPlay == True:
@@ -170,8 +173,8 @@ def BlackJack():
                 Ppoints = playerHit(pStarterHand, masterDeck, Ppoints)
                 if Ppoints > 21:
                     print("you bust")
-                    money -= amountToBet
-                    print(f"you lost: {amountToBet} dollars")
+                    money -= int(amountToBet)
+                    print(f"you lost: {int(amountToBet)} dollars")
                     PinPlay = False
                 elif Ppoints == 21:
                     pass
@@ -188,8 +191,8 @@ def BlackJack():
                         if Dpoints <= 21:
                             if Dpoints > Ppoints:
                                 print("dealer wins")
-                                money -= amountToBet
-                                print(f"you lost: {amountToBet} dollars")
+                                money -= int(amountToBet)
+                                print(f"you lost: {int(amountToBet)} dollars")
                                 DinPlay = False
                             elif Dpoints == Ppoints:
                                 print("tie")
@@ -197,13 +200,13 @@ def BlackJack():
                                 DinPlay = False
                             else: 
                                 print("you win")
-                                money += amountToBet
-                                print(f"you earned: {amountToBet} dollars")
+                                money += int(amountToBet)
+                                print(f"you earned: {int(amountToBet)} dollars")
                                 DinPlay = False
                         else:
                             print("dealer busts, you win")
-                            money += amountToBet
-                            print(f"you earned: {amountToBet} dollars")
+                            money += int(amountToBet)
+                            print(f"you earned: {int(amountToBet)} dollars")
                             DinPlay = False
                     else:
                         dealerHand.append(random.choice(masterDeck))

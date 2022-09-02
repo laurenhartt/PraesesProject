@@ -3,7 +3,6 @@ import random
 suits = ("Spades","Hearts","Clubs","Diamonds")
 cards = (2,3,4,5,6,7,8,9,10,"King","Queen","Jack","Ace")
 
-
 playerHand = []
 dealerHand = []
 
@@ -65,9 +64,7 @@ def getDPoints(dealerHand):
             points += value.card
     return points
 
-
 def BlackJack():
-    bet = 0
     money = 100
     while money >= 10:
         print("---------------------------------------")
@@ -81,7 +78,6 @@ def BlackJack():
             elif amountToBet == 0:
                 quit()
             else:
-                bet += amountToBet
                 print("current bet: ", amountToBet)
                 print("money left to spend: ", money)
                 break
@@ -140,7 +136,7 @@ def BlackJack():
                 else:
                     PinPlay = True
                     count += 1   
-            else:
+            elif hitOrStay == "S":
                 Ppoints = getPPoints(pStarterHand.playerHand)
                 PinPlay = False
                 while DinPlay == True:
@@ -172,11 +168,13 @@ def BlackJack():
                         else :
                             print("dealer busts, you win")
                             money += amountToBet
-                            print("you earned: ",money," dollars")
+                            print("you earned: ",amountToBet," dollars")
                             DinPlay = False
                     else:
                         dealerHand.append(random.choice(masterDeck))
                         DinPlay = True
+            else:
+                print("You need to type a capital H or capital S")
 
 BlackJack()
 

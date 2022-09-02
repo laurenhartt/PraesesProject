@@ -12,12 +12,16 @@ class Card():
     def __init__(self,suits,cards):
         self.suit = suits
         self.card = cards
+
     def Suit(self):
         return self.suit
+
     def Card(self):
         return self.card
+
     def __str__(self):
         return str(self.card) + " of " + str(self.suit)
+
 deck = []
 for suit in suits:
     for card in cards:
@@ -29,132 +33,163 @@ class Player():
         
     def getHand(self):
         return self.playerHand
-def getPPoints(playerHand):
-    points = 0
-    face = ["King","Queen","Jack"]
-    for value in playerHand:
-        if value.card in face:
-            points += 10
-        elif value.card == "Ace":
-            if points >= 11:
-                points += 1
+
+    def getPPoints(self):
+        points = 0
+        face = ["King","Queen","Jack"]
+
+        for value in self.playerHand:
+            if value.card in face:
+                points += 10
+            elif value.card == "Ace":
+                if points >= 11:
+                    points += 1
+                else:
+                    points += 11
             else:
-                points += 11
-        else:
-            points += value.card
-    return points
+                points += value.card
+
+        return points
 
 class Dealer():
     def __init__(self,dealerHand):
         self.dealerHand = dealerHand
+
     def getHand(self):
         return self.dealerHand
-def getDPoints(dealerHand):
-    points = 0
-    face = ["King","Queen","Jack"]
-    for value in dealerHand:
-        if value.card in face:
-            points += 10
-        elif value.card == "Ace":
-            if points >= 11:
-                points += 1
+
+    def getDPoints(self):
+        points = 0
+        face = ["King","Queen","Jack"]
+
+        for value in self.dealerHand:
+            if value.card in face:
+                points += 10
+            elif value.card == "Ace":
+                if points >= 11:
+                    points += 1
+                else:
+                    points += 11
             else:
-                points += 11
-        else:
-            points += value.card
+                points += value.card
+
+        return points
+
+def playerHit(hand, deck, points):
+    hand.playerHand.append(random.choice(deck))
+    print("\033[4mYour current hand:\033[0m")
+
+    for index in range(0, len(hand.playerHand)):
+        i = hand.playerHand[index]
+        print(i)
+
+    points = hand.getPPoints()
+    print("Your points:")
+    print(points)
+    print("--------")
+    return points
+
+def dealerStart(hand, points):
+    print("\033[4mDealer's hand:\033[0m")
+
+    for index in range(0, len(hand.dealerHand)):
+        i = hand.dealerHand[index]
+        print(i)
+
+    points = hand.getDPoints()
+    print("--------")
+    print("dealer's points:")
+    print(hand.getDPoints())
+    print("--------")
     return points
 
 def BlackJack():
     money = 100
+    print("---------------------------------------")
+    print("Welcome to BlackJack!")
+    print("You have a starting amount of $100! Play till you lose it all! (or get bored)")
     while money >= 10:
-        print("---------------------------------------")
-        print("Welcome to BlackJack!")
-        print("You have a starting amount of $100! Play till you lose it all! (or get bored)")
         print("Minimum bet is $10!")
+
         while True:
             amountToBet = int(input("How much would you like to bet? (Type 0 to exit): "))
             if 10 > amountToBet > 0:
                 print("Oops! The bet minimum is $10! Try again")
             elif amountToBet == 0:
                 quit()
+            elif amountToBet > money:
+                print("You don't have enough for a bet that high")
             else:
                 print("current bet: ", amountToBet)
                 print("money left to spend: ", money)
                 break
+        
         masterDeck = []
         masterDeck = deck*6
+
+
         playerHand = []
+        playerHand.append(random.choice(masterDeck))
+
         dealerHand = []    
         playerHand.append(random.choice(masterDeck))
-        playerHand.append(random.choice(masterDeck))
+
         pStarterHand = Player(playerHand)
+
         dealerHand.append(random.choice(masterDeck))
         dealerHand.append(random.choice(masterDeck))
         dStarterHand = Dealer(dealerHand)
+
         print("---------------------------------------")
         print("\033[4mYour current hand:\033[0m")
         print(pStarterHand.playerHand[0])
         print(pStarterHand.playerHand[1])
         print("--------")
         print("your points:")
-        print(getPPoints(pStarterHand.playerHand))
+        print(pStarterHand.getPPoints())
         print("--------")
         print("\033[4mDealer's current hand:\033[0m")
         print("?")
         print(dStarterHand.dealerHand[1])
+
         PinPlay = True
         DinPlay = True
         count = 0
         Ppoints = 0
         Dpoints = 0
-        Ppoints = getPPoints(pStarterHand.playerHand)
+        Ppoints = pStarterHand.getPPoints()
         if Ppoints == 21:
             print("blackjack")
-            money += 1.5*amountToBet
-            print("you earned: ",amountToBet," dollars")
+            money += 1.5 * amountToBet
+            print(f"you earned: {1.5 * amountToBet} dollars")
             PinPlay = False
+
         while PinPlay == True:
             hitOrStay = input("Hit or stay? (H/S): ")
             if hitOrStay == "H":
-                pStarterHand.playerHand.append(random.choice(masterDeck))
-                print("\033[4mYour current hand:\033[0m")
-                for index in range(0,len(playerHand)):
-                    i = playerHand[index]
-                    print(i)
-                Ppoints = getPPoints(pStarterHand.playerHand)
-                print("--------")
-                print("Your points:")
-                print(getPPoints(pStarterHand.playerHand))
-                print("--------")
+                Ppoints = playerHit(pStarterHand, masterDeck, Ppoints)
                 if Ppoints > 21:
                     print("you bust")
                     money -= amountToBet
-                    print("you lost: ",amountToBet," dollars")
+                    print(f"you lost: {amountToBet} dollars")
                     PinPlay = False
                 elif Ppoints == 21:
                     pass
                 else:
                     PinPlay = True
-                    count += 1   
+                    count += 1
+
             elif hitOrStay == "S":
-                Ppoints = getPPoints(pStarterHand.playerHand)
+                Ppoints = pStarterHand.getPPoints()
                 PinPlay = False
                 while DinPlay == True:
-                    print("\033[4mDealer's hand:\033[0m")
-                    for index in range(0,len(dealerHand)):
-                        i = dealerHand[index]
-                        print(i)
-                    Dpoints = getDPoints(dStarterHand.dealerHand)
-                    print("--------")
-                    print("dealer's points:")
-                    print(getDPoints(dStarterHand.dealerHand))
-                    print("--------")
+                    Dpoints = dealerStart(dStarterHand, Dpoints)
                     if Dpoints  >= 17:
                         if Dpoints <= 21:
                             if Dpoints > Ppoints:
                                 print("dealer wins")
                                 money -= amountToBet
-                                print("you lost: ",amountToBet," dollars")
+                                print(f"you lost: {amountToBet} dollars")
                                 DinPlay = False
                             elif Dpoints == Ppoints:
                                 print("tie")
@@ -163,20 +198,24 @@ def BlackJack():
                             else: 
                                 print("you win")
                                 money += amountToBet
-                                print("you earned: ",amountToBet," dollars")
+                                print(f"you earned: {amountToBet} dollars")
                                 DinPlay = False
-                        else :
+                        else:
                             print("dealer busts, you win")
                             money += amountToBet
-                            print("you earned: ",amountToBet," dollars")
+                            print(f"you earned: {amountToBet} dollars")
                             DinPlay = False
                     else:
                         dealerHand.append(random.choice(masterDeck))
                         DinPlay = True
+
             else:
                 print("You need to type a capital H or capital S")
+        print(f"Money after this round: {money}")
+        print()
 
 BlackJack()
+
 
 
 

@@ -7,6 +7,7 @@ The program was written in VScode in Python.
 Install and run Instructions:
 
 Window's Instructions:
+
 Step 1. Install Python 3.10
 
 
@@ -18,6 +19,7 @@ Step 3. run "py .\BlackJack.py
 
 
 Mac Instructions:
+
 Step 1. Install Python 3.10
 
 

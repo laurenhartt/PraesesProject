@@ -105,18 +105,19 @@ def dealerStart(hand, points):
 
 def BlackJack():
     money = 100
+    minBet = 10
     print("---------------------------------------")
     print("Welcome to BlackJack!")
     print("You have a starting amount of $100! Play till you lose it all! (or get bored)")
-    while money >= 10:
-        print("Minimum bet is $10!")
+    while money >= minBet:
+        print(f"Minimum bet is ${minBet}!")
 
         while True:
             amountToBet = input("How much would you like to bet? (Type 0 to exit): ")
             if not amountToBet.isdigit():
                 print("That input was not an integer number")
             else:
-                if 10 > int(amountToBet) > 0:
+                if minBet > int(amountToBet) > 0:
                     print("Oops! The bet minimum is $10! Try again")
                 elif int(amountToBet) == 0:
                     quit()
@@ -169,7 +170,8 @@ def BlackJack():
 
         while PinPlay == True:
             hitOrStay = input("Hit or stay? (H/S): ")
-            if hitOrStay == "H":
+            Cap = hitOrStay.upper()
+            if Cap == "H":
                 Ppoints = playerHit(pStarterHand, masterDeck, Ppoints)
                 if Ppoints > 21:
                     print("you bust")
@@ -182,7 +184,7 @@ def BlackJack():
                     PinPlay = True
                     count += 1
 
-            elif hitOrStay == "S":
+            elif Cap == "S":
                 Ppoints = pStarterHand.getPPoints()
                 PinPlay = False
                 while DinPlay == True:
